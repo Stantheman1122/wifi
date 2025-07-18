@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is Wi-Fi? An Interactive Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The application is structured as a narrative journey, guiding the user from a high-level concept to more detailed specifics. It starts with a simple analogy ("How It Works"), moves to historical context ("The Evolution"), delves into technical comparisons ("Frequencies"), and concludes with practical advice ("Security"). This thematic, top-down structure was chosen over a linear report format to build understanding progressively, making a complex topic digestible for a non-technical audience. Key interactions like chart clicks and tab selections encourage exploration rather than passive reading. -->
+    <!-- Visualization & Content Choices: 
+    - Report Info: Core concept of wireless data transmission. -> Goal: Inform. -> Viz/Presentation: HTML/CSS animated diagram. -> Interaction: On-scroll reveal. -> Justification: Visually demonstrates the invisible process of radio waves, making it intuitive. -> Library/Method: Tailwind CSS, Vanilla JS.
+    - Report Info: Wi-Fi standards and their speeds. -> Goal: Compare/Change over time. -> Viz/Presentation: Horizontal Bar Chart. -> Interaction: Click on a bar to see details. -> Justification: Bar chart provides clear visual comparison of speed capabilities. Interaction allows for progressive disclosure of details. -> Library/Method: Chart.js.
+    - Report Info: 2.4 GHz vs 5 GHz vs 6 GHz bands. -> Goal: Compare. -> Viz/Presentation: Three-column comparison layout. -> Interaction: Static display with icons for clarity. -> Justification: A side-by-side layout is the most direct way to present trade-offs (speed vs. range vs. congestion). -> Library/Method: Tailwind CSS Grid.
+    - Report Info: Wi-Fi security protocols. -> Goal: Organize/Inform. -> Viz/Presentation: Interactive tabs. -> Interaction: Click a tab to show its description. -> Justification: Organizes information cleanly and encourages user engagement to learn about each protocol. -> Library/Method: Vanilla JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 500px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+        .wave {
+            position: absolute;
+            background-color: rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            transform: scale(0);
+            opacity: 0;
+            animation: radiate 3s ease-out infinite;
+        }
+        .wave:nth-child(2) { animation-delay: 1s; }
+        .wave:nth-child(3) { animation-delay: 2s; }
+        @keyframes radiate {
+            from {
+                transform: scale(0);
+                opacity: 1;
+            }
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-slate-700">📶 Wi-Fi Explained</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#how-it-works" class="text-slate-600 hover:bg-slate-100 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">How It Works</a>
+                        <a href="#evolution" class="text-slate-600 hover:bg-slate-100 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">Evolution</a>
+                        <a href="#frequencies" class="text-slate-600 hover:bg-slate-100 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">Frequencies</a>
+                        <a href="#security" class="text-slate-600 hover:bg-slate-100 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">Security</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8 md:py-16">
+
+        <header class="text-center mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 mb-4">What is Wi-Fi?</h1>
+            <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-600">It's the invisible magic that connects us to the internet. But how does it really work? Let's break it down in this interactive guide.</p>
+        </header>
+
+        <section id="how-it-works" class="py-12 md:py-20 scroll-mt-20">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">How It Works: A Simple Analogy</h2>
+                <p class="text-lg text-slate-600 mb-12">
+                    This section simplifies the core concept of Wi-Fi. Think of it like a very sophisticated two-way radio. Instead of voice, it sends and receives digital data using radio waves. We've created a small animation below to visualize this invisible process between a router and your device.
+                </p>
+            </div>
+            
+            <div class="relative w-full max-w-2xl mx-auto h-64 flex items-center justify-between">
+                <div class="flex flex-col items-center">
+                    <div id="router-icon" class="relative text-6xl p-4 bg-blue-100 rounded-full">
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        📡
+                    </div>
+                    <span class="mt-2 font-semibold">Router</span>
+                </div>
+                
+                <div class="flex-grow border-t-2 border-dashed border-slate-300 mx-4"></div>
+
+                <div class="flex flex-col items-center">
+                    <div class="text-6xl">💻</div>
+                    <span class="mt-2 font-semibold">Your Device</span>
+                </div>
+            </div>
+            <p class="text-center max-w-2xl mx-auto mt-8 text-slate-600">
+                A router takes an internet connection from a cable and converts it into radio signals. Your device (laptop, phone) has a built-in adapter that reads these signals and sends signals back to the router, creating a wireless connection.
+            </p>
+        </section>
+
+        <section id="evolution" class="py-12 md:py-20 scroll-mt-20">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">The Evolution of Speed</h2>
+                <p class="text-lg text-slate-600 mb-12">
+                   Wi-Fi has gotten dramatically faster over the years. This section charts the progression of different Wi-Fi standards, each a new generation with significant performance boosts. Click on any bar in the chart to see more details about that specific standard and understand its impact.
+                </p>
+            </div>
+            <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-lg">
+                <div class="chart-container">
+                    <canvas id="wifiStandardsChart"></canvas>
+                </div>
+                <div id="wifi-details" class="mt-8 p-6 bg-slate-100 rounded-lg min-h-[120px]">
+                    <h3 id="details-title" class="font-bold text-lg text-slate-800">Click a bar to see details</h3>
+                    <p id="details-text" class="text-slate-600 mt-2">The chart shows the maximum theoretical speed for each standard. Real-world speeds are always lower but have increased proportionally.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="frequencies" class="py-12 md:py-20 scroll-mt-20">
+            <div class="text-center max-w-3xl mx-auto">
+                 <h2 class="text-3xl font-bold mb-4">The Airwaves: 2.4 vs 5 vs 6 GHz</h2>
+                <p class="text-lg text-slate-600 mb-12">
+                   Wi-Fi signals travel on different frequency bands, much like radio stations. This section compares the three main bands used today. Understanding their trade-offs helps explain why your connection might be fast in one room and slow in another.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-600">2.4 GHz</h3>
+                    <p class="text-slate-600 mb-4">The original workhorse. It's great at covering long distances and penetrating walls.</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-start"><span class="text-green-500 mr-2 mt-1">✔️</span> <strong>Best Range:</strong> Travels further and through obstacles easily.</li>
+                        <li class="flex items-start"><span class="text-red-500 mr-2 mt-1">❌</span> <strong>Slower Speeds:</strong> Limited data bandwidth.</li>
+                        <li class="flex items-start"><span class="text-red-500 mr-2 mt-1">❌</span> <strong>High Congestion:</strong> Many devices (microwaves, Bluetooth, old cordless phones) use this band, causing interference.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-4 border-blue-500">
+                    <h3 class="text-2xl font-bold mb-3 text-blue-600">5 GHz</h3>
+                    <p class="text-slate-600 mb-4">The modern standard for most devices. Offers much faster speeds with less interference.</p>
+                     <ul class="space-y-2">
+                        <li class="flex items-start"><span class="text-green-500 mr-2 mt-1">✔️</span> <strong>Faster Speeds:</strong> Much more bandwidth for data-heavy tasks like streaming and gaming.</li>
+                        <li class="flex items-start"><span class="text-green-500 mr-2 mt-1">✔️</span> <strong>Less Congestion:</strong> Fewer devices compete for airtime.</li>
+                        <li class="flex items-start"><span class="text-red-500 mr-2 mt-1">❌</span> <strong>Shorter Range:</strong> Doesn't penetrate walls and floors as effectively as 2.4 GHz.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-3 text-indigo-600">6 GHz (Wi-Fi 6E/7)</h3>
+                    <p class="text-slate-600 mb-4">The new express lane. It's exclusive to the newest devices, offering massive bandwidth.</p>
+                     <ul class="space-y-2">
+                        <li class="flex items-start"><span class="text-green-500 mr-2 mt-1">✔️</span> <strong>Blazing Speeds:</strong> An even wider, multi-lane highway for data.</li>
+                        <li class="flex items-start"><span class="text-green-500 mr-2 mt-1">✔️</span> <strong>Minimal Congestion:</strong> Only new, compatible devices can use it.</li>
+                        <li class="flex items-start"><span class="text-red-500 mr-2 mt-1">❌</span> <strong>Shortest Range:</strong> Even more sensitive to obstacles than 5 GHz.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="security" class="py-12 md:py-20 scroll-mt-20">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Keeping Your Connection Secure</h2>
+                <p class="text-lg text-slate-600 mb-12">
+                   Just like you lock your front door, you need to lock your Wi-Fi network. This section explains the different types of Wi-Fi security protocols that protect your data from unauthorized access. Click the buttons to learn about each one and see why the latest standard is the most secure choice.
+                </p>
+            </div>
+            <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+                <div class="border-b border-slate-200 mb-6">
+                    <nav id="security-tabs" class="-mb-px flex space-x-6" aria-label="Tabs">
+                        <button data-target="wep" class="security-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300">WEP</button>
+                        <button data-target="wpa" class="security-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300">WPA</button>
+                        <button data-target="wpa2" class="security-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300">WPA2</button>
+                        <button data-target="wpa3" class="security-tab security-tab-active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-blue-500 text-blue-600">WPA3</button>
+                    </nav>
+                </div>
+                <div id="security-content" class="min-h-[150px]">
+                    <div id="content-wep" class="security-panel hidden">
+                        <h3 class="text-lg font-bold text-red-600">WEP (Wired Equivalent Privacy)</h3>
+                        <p class="mt-2 text-slate-600">The oldest and least secure protocol. It has known vulnerabilities and can be cracked in minutes. <strong>It should never be used.</strong> If your router only supports WEP, it's time for an upgrade.</p>
+                    </div>
+                     <div id="content-wpa" class="security-panel hidden">
+                        <h3 class="text-lg font-bold text-orange-600">WPA (Wi-Fi Protected Access)</h3>
+                        <p class="mt-2 text-slate-600">An improvement over WEP, but it also has known security flaws. It was an intermediate step and is now considered obsolete and insecure.</p>
+                    </div>
+                     <div id="content-wpa2" class="security-panel hidden">
+                        <h3 class="text-lg font-bold text-yellow-600">WPA2 (Wi-Fi Protected Access 2)</h3>
+                        <p class="mt-2 text-slate-600">For many years, this was the industry standard and is still widely used. It offers strong encryption, but is vulnerable to certain types of advanced attacks. It's the minimum level of security you should accept today.</p>
+                    </div>
+                     <div id="content-wpa3" class="security-panel">
+                        <h3 class="text-lg font-bold text-green-600">WPA3 (Wi-Fi Protected Access 3)</h3>
+                        <p class="mt-2 text-slate-600">The current security standard. It provides more robust encryption and better protection against modern attacks, making it much harder for hackers to crack passwords and eavesdrop on your connection. <strong>Always choose WPA3 if it's available.</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-slate-800 text-slate-300">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>An interactive guide to understanding Wi-Fi.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wifiData = {
+                labels: ['802.11b', '802.11g', '802.11n (Wi-Fi 4)', '802.11ac (Wi-Fi 5)', '802.11ax (Wi-Fi 6/6E)', '802.11be (Wi-Fi 7)'],
+                speeds: [11, 54, 600, 3500, 9600, 46000],
+                details: {
+                    '802.11b': {
+                        title: '802.11b (1999)',
+                        text: 'One of the first widely adopted standards. It operated on the crowded 2.4 GHz band and offered speeds up to 11 Mbps, paving the way for mainstream wireless networking.'
+                    },
+                    '802.11g': {
+                        title: '802.11g (2003)',
+                        text: 'A major step up, offering speeds up to 54 Mbps on the 2.4 GHz band. It was backward compatible with 802.11b, which helped accelerate its adoption.'
+                    },
+                    '802.11n (Wi-Fi 4)': {
+                        title: '802.11n / Wi-Fi 4 (2009)',
+                        text: 'Introduced MIMO (Multiple Input, Multiple Output) antennas and the ability to use both 2.4 GHz and 5 GHz bands. This dramatically increased speeds to a theoretical max of 600 Mbps.'
+                    },
+                    '802.11ac (Wi-Fi 5)': {
+                        title: '802.11ac / Wi-Fi 5 (2013)',
+                        text: 'Operated exclusively on the cleaner 5 GHz band, offering multi-gigabit speeds (up to 3.5 Gbps, or 3500 Mbps) and supporting more devices simultaneously.'
+                    },
+                    '802.11ax (Wi-Fi 6/6E)': {
+                        title: '802.11ax / Wi-Fi 6 & 6E (2019)',
+                        text: 'Focused on efficiency in crowded environments as much as speed. Wi-Fi 6E extended these capabilities into the new 6 GHz band. Speeds can reach up to 9.6 Gbps.'
+                    },
+                    '802.11be (Wi-Fi 7)': {
+                        title: '802.11be / Wi-Fi 7 (2024)',
+                        text: 'The latest standard, designed for extremely high throughput. It uses all three bands (2.4, 5, and 6 GHz) simultaneously and can reach theoretical speeds of up to 46 Gbps, enabling next-gen applications.'
+                    }
+                }
+            };
+
+            const ctx = document.getElementById('wifiStandardsChart').getContext('2d');
+            const detailsTitle = document.getElementById('details-title');
+            const detailsText = document.getElementById('details-text');
+
+            const wifiChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: wifiData.labels.map(label => label.split(' ')),
+                    datasets: [{
+                        label: 'Max. Theoretical Speed (Mbps)',
+                        data: wifiData.speeds,
+                        backgroundColor: [
+                            'rgba(110, 231, 183, 0.6)',
+                            'rgba(107, 114, 128, 0.6)',
+                            'rgba(99, 102, 241, 0.6)',
+                            'rgba(59, 130, 246, 0.6)',
+                            'rgba(139, 92, 246, 0.6)',
+                            'rgba(236, 72, 153, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(110, 231, 183, 1)',
+                            'rgba(107, 114, 128, 1)',
+                            'rgba(99, 102, 241, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(139, 92, 246, 1)',
+                            'rgba(236, 72, 153, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'logarithmic',
+                            title: {
+                                display: true,
+                                text: 'Speed in Megabits per second (Mbps) - Logarithmic Scale'
+                            }
+                        },
+                        y: {
+                           ticks: {
+                                autoSkip: false
+                           }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x.toLocaleString() + ' Mbps';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const label = wifiData.labels[index];
+                            const detailData = wifiData.details[label.split(' ')[0]];
+                            
+                            if (detailData) {
+                                detailsTitle.textContent = detailData.title;
+                                detailsText.textContent = detailData.text;
+                            }
+                        }
+                    }
+                }
+            });
+
+            const securityTabs = document.querySelectorAll('.security-tab');
+            const securityPanels = document.querySelectorAll('.security-panel');
+
+            securityTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.target;
+
+                    securityTabs.forEach(t => {
+                        t.classList.remove('security-tab-active', 'border-blue-500', 'text-blue-600');
+                        t.classList.add('border-transparent', 'text-slate-500', 'hover:text-slate-700', 'hover:border-slate-300');
+                    });
+                    
+                    tab.classList.add('security-tab-active', 'border-blue-500', 'text-blue-600');
+                    tab.classList.remove('border-transparent', 'text-slate-500', 'hover:text-slate-700', 'hover:border-slate-300');
+
+                    securityPanels.forEach(panel => {
+                        if (panel.id === `content-${target}`) {
+                            panel.classList.remove('hidden');
+                        } else {
+                            panel.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
